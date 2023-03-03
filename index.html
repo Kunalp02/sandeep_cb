@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -225,94 +225,94 @@
     </div>
 
     <script>
-        const chatbotButton = document.querySelector("#chatbot-button");
+      const chatbotButton = document.querySelector("#chatbot-button");
 
-        const chatbotWindow = document.querySelector("#chatbot-window");
+      const chatbotWindow = document.querySelector("#chatbot-window");
 
-        const closeButton = document.querySelector("#close-button");
+      const closeButton = document.querySelector("#close-button");
 
-        const chatbotMessages = document.querySelector("#chatbot-messages");
+      const chatbotMessages = document.querySelector("#chatbot-messages");
 
-        const chatbotForm = document.querySelector("#chatbot-form");
+      const chatbotForm = document.querySelector("#chatbot-form");
 
-        const messageInput = document.querySelector("#message-input");
+      const messageInput = document.querySelector("#message-input");
 
-        const sendButton = document.querySelector(".send-button");
+      const sendButton = document.querySelector(".send-button");
 
-        // Open chatbot window when chatbot button is clicked
-        chatbotButton.addEventListener("click", () => {
-        chatbotWindow.classList.toggle("open");
-        chatbotButton.classList.toggle("open");
-        });
+      // Open chatbot window when chatbot button is clicked
+      chatbotButton.addEventListener("click", () => {
+      chatbotWindow.classList.toggle("open");
+      chatbotButton.classList.toggle("open");
+      });
 
-        // Close chatbot window when close button is clicked
-        closeButton.addEventListener("click", () => {
-        chatbotWindow.classList.remove("open");
-        });
+      // Close chatbot window when close button is clicked
+      closeButton.addEventListener("click", () => {
+      chatbotWindow.classList.remove("open");
+      });
 
-        // Send message when form is submitted
-        chatbotForm.addEventListener("submit", (event) => {
-            event.preventDefault();
+      // Send message when form is submitted
+      chatbotForm.addEventListener("submit", (event) => {
+          event.preventDefault();
 
-            // Get message text
-            const messageText = messageInput.value;
-            var emptyMessageAlert = document.querySelector(".empty-message-alert");
+          // Get message text
+          const messageText = messageInput.value;
+          var emptyMessageAlert = document.querySelector(".empty-message-alert");
 
-            if (!messageText) {
-                emptyMessageAlert.innerHTML = "Please enter your message";
-                emptyMessageAlert.style.display = "block";
-                document.querySelector(".message-input").classList.add("shake");
-                return false;
-            }
-            emptyMessageAlert.style.display = "none";
-            document.querySelector(".message-input").classList.remove("shake");
+          if (!messageText) {
+              emptyMessageAlert.innerHTML = "Please enter your message";
+              emptyMessageAlert.style.display = "block";
+              document.querySelector(".message-input").classList.add("shake");
+              return false;
+          }
+          emptyMessageAlert.style.display = "none";
+          document.querySelector(".message-input").classList.remove("shake");
 
-            // Clear message input
-            messageInput.value = "";
+          // Clear message input
+          messageInput.value = "";
 
-            // Add message to chatbot messages
-            const messageElement = document.createElement("div");
-            messageElement.classList.add("chatbot-message", "user");
-            messageElement.innerText = messageText;
-            chatbotMessages.appendChild(messageElement);
+          // Add message to chatbot messages
+          const messageElement = document.createElement("div");
+          messageElement.classList.add("chatbot-message", "user");
+          messageElement.innerText = messageText;
+          chatbotMessages.appendChild(messageElement);
 
-            // Scroll chatbot messages to bottom
+          // Scroll chatbot messages to bottom
+          chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+
+          // Simulate typing
+          const typingElement = document.createElement("div");
+          typingElement.classList.add("chatbot-message", "typing");
+          typingElement.innerHTML = "<span></span><span></span><span></span>";
+          chatbotMessages.appendChild(typingElement);
+
+          
+
+          // Wait for 1 second before sending response
+          setTimeout(() => {
+            // Remove typing message
+            chatbotMessages.removeChild(typingElement);
+
+            // Add response message
+            const responseElement = document.createElement("div");
+            responseElement.classList.add("chatbot-message", "bot");
+
+            var message = { 'message': messageText };
+// https://web-production-5c628.up.railway.app/chat/
+            console.log(message);
+            fetch('https://web-production-6bd7.up.railway.app/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(message),
+            })
+            .then(response => response.json())
+            .then(data => {
+                responseElement.innerText = data.response;
+                chatbotMessages.appendChild(responseElement);
+            });
             chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
-
-            // Simulate typing
-            const typingElement = document.createElement("div");
-            typingElement.classList.add("chatbot-message", "typing");
-            typingElement.innerHTML = "<span></span><span></span><span></span>";
-            chatbotMessages.appendChild(typingElement);
-
-            
-
-            // Wait for 1 second before sending response
-            setTimeout(() => {
-              // Remove typing message
-              chatbotMessages.removeChild(typingElement);
-
-              // Add response message
-              const responseElement = document.createElement("div");
-              responseElement.classList.add("chatbot-message", "bot");
-
-              var message = { 'message': messageText };
-
-              console.log(message);
-              fetch('https://web-production-5c628.up.railway.app/chat/', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify(message),
-              })
-              .then(response => response.json())
-              .then(data => {
-                  responseElement.innerText = data.response;
-                  chatbotMessages.appendChild(responseElement);
-              });
-              chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
-            }, 1000);
-        });
-
+          }, 1000);
+      });
+      
     </script>
   </body>
 </html>
